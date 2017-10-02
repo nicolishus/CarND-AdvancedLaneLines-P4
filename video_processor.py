@@ -9,6 +9,12 @@ import pickle
 import glob
 from tracker import Tracker
 
+# create global tracker object
+window_width = 25
+window_height = 80
+tracker = Tracker(my_window_width=window_width, my_window_height=window_height, my_margin=25, my_ym=10/720, 
+				  my_xm=4/384, my_smooth_factor=15)
+
 # Read tin the saved object_points and image_points
 dist_pickle = pickle.load(open("./camera_cal/calibration_pickle.p", "rb"))
 mtx = dist_pickle["mtx"]
@@ -175,6 +181,7 @@ def metrics(warped, image, yvals, res_yvals, left_point, right_fitx, left_fitx, 
 
 def process_image(img):
 	# first undistort image using distortion coefficients from running calibration
+	global tracker
 	image = cv2.undistort(img, mtx, dist, None, mtx)
 	image_size = (image.shape[1], image.shape[0])
 
@@ -185,10 +192,6 @@ def process_image(img):
 	warped, M, Minv = perspective_transform(image, blurred)
 
 	# Create Tracker object (10m = 720 pixel, and 4m = 384 pixels)
-	window_width = 25
-	window_height = 80
-	tracker = Tracker(my_window_width=window_width, my_window_height=window_height, my_margin=25, my_ym=10/720, 
-					  my_xm=4/384, my_smooth_factor=15)
 	lane_markers = tracker.find_lanes(warped)
 
 	# points used to draw all the left and right windows
