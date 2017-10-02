@@ -12,8 +12,8 @@ from tracker import Tracker
 # create global tracker object
 window_width = 25
 window_height = 80
-tracker = Tracker(my_window_width=window_width, my_window_height=window_height, my_margin=25, my_ym=10/720, 
-				  my_xm=4/384, my_smooth_factor=15)
+tracker = Tracker(my_window_width=window_width, my_window_height=window_height, my_margin=25, my_ym=40/720, 
+				  my_xm=3.7/550, my_smooth_factor=15)
 
 # Read tin the saved object_points and image_points
 dist_pickle = pickle.load(open("./camera_cal/calibration_pickle.p", "rb"))
@@ -118,12 +118,13 @@ def perspective_transform(image, blurred):
 	'''Function that preforms the perspective transform.'''
 	image_size = (image.shape[1], image.shape[0])
 	bottom_width = .76
-	middle_width = .10
-	height_percent = .62
+	middle_width = .09
+	height_percent = .65
 	bottom_trim = .935
+	# src = 
 	src = np.float32([
-		[image.shape[1] * (.5 - middle_width/2), image.shape[0]*height_percent], 
-		[image.shape[1] * (.5 + middle_width/2), image.shape[0]*height_percent], 
+		[image.shape[1] * (.5 - middle_width/2), image.shape[0]*height_percent],
+		[image.shape[1] * (.53 + middle_width/2), image.shape[0]*height_percent], 
 		[image.shape[1] * (.5 + bottom_width/2), image.shape[0]*bottom_trim],
 		[image.shape[1] * (.5 - bottom_width/2), image.shape[0]*bottom_trim]])
 	offset = image_size[0] * .25
